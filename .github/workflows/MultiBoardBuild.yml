@@ -1,0 +1,46 @@
+name: Arduino Blink Multi-Board Build
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  MultiBoardBuild:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - board: arduino:avr:uno
+            id: uno
+          - board: arduino:avr:mega
+            id: mega
+          - board: arduino:avr:nano
+            id: nano
+          - board: esp32:esp32:esp32
+            id: esp32
+          
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Arduino CLI
+        uses: arduino/setup-arduino-cli@v1
+
+      - name: Configure Arduino CLI
+        run: |
+          arduino-cli config init
+          arduino-cli core update-index
+          arduino-cli core install arduino:avr
+          arduino-cli core install esp32:esp32
+
+      - name: Compile Blink
+        run: |
+          arduino-cli compile --fqbn ${{ matrix.board }} Blink --output-dir build/${{ matrix.board }}
+          
+      - name: Upload compiled binaries
+        uses: actions/upload-artifact@v4
+        with:
+          name: blink-${{ matrix.id }}
+          path: build/${{ matrix.board }}
