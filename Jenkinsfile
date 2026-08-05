@@ -92,7 +92,7 @@ pipeline {
                 // Delete the cloned repo
                 sh 'rm -rf ${WORKSPACE}/PlatformIO_Jenkins_test'
                 //sh 'rm -rf ${WORKSPACE}/PlatformIO_Jenkins_test'
-                sh 'rm -rf ${WORKSPACE}'
+                //sh 'rm -rf ${WORKSPACE}'
             }
         }
     }
