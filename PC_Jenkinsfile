@@ -2,50 +2,45 @@ pipeline {
     agent any
 
     environment {
-        // Explicitly call PlatformIO via Python to avoid PATH issues
-        PIO = "python -m platformio"
+        // Point directly to your PlatformIO executable
+        PIO = "C:\\Users\\rajes\\.platformio\\penv\\Scripts\\platformio.exe"
         BOARD = "esp32dev"
     }
 
     stages {
         stage('Checkout') {
             steps {
-                // Pull latest code from GitHub
                 git branch: 'master', url: 'https://github.com/rajesh19071998/PlatformIO_Jenkins_test.git'
             }
         }
 
         stage('PlatformIO Version') {
             steps {
-                sh "${PIO} --version"
+                bat "\"${PIO}\" --version"
             }
         }
 
         stage('Build Firmware') {
             steps {
-                sh "${PIO} run -e ${BOARD}"
+                bat "\"${PIO}\" run -e ${BOARD}"
             }
         }
 
         stage('Archive Firmware') {
             steps {
-                // Archive compiled .bin file for download
-                archiveArtifacts artifacts: '.pio/build/${BOARD}/firmware.bin', fingerprint: true
+                archiveArtifacts artifacts: ".pio\\build\\${BOARD}\\firmware.bin", fingerprint: true
             }
         }
 
         stage('Test') {
             steps {
-                // Run unit tests if you have them
-                sh "${PIO} test -e ${BOARD}"
+                bat "\"${PIO}\" test -e ${BOARD}"
             }
         }
     }
 
     post {
         always {
-            // Keep logs and artifacts even if build fails
-            junit '**/.pio/build/${BOARD}/test-results/*.xml'
             cleanWs()
         }
     }
