@@ -2,12 +2,17 @@ pipeline {
     agent any
 
     environment {
-        // Point directly to your PlatformIO executable
         PIO = "C:\\Users\\rajes\\.platformio\\penv\\Scripts\\platformio.exe"
         BOARD = "esp32dev"
     }
 
     stages {
+        stage('Clean Workspace') {
+            steps {
+                cleanWs()
+            }
+        }
+
         stage('Checkout') {
             steps {
                 git branch: 'master', url: 'https://github.com/rajesh19071998/PlatformIO_Jenkins_test.git'
@@ -34,15 +39,14 @@ pipeline {
 
         stage('Test') {
             steps {
-                //bat "\"${PIO}\" test -e ${BOARD}"
-				echo 'Test'
+                echo 'Test stage placeholder'
             }
         }
     }
 
     post {
         always {
-            cleanWs()
+            echo 'Pipeline finished'
         }
     }
 }
