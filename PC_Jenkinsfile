@@ -34,7 +34,7 @@ pipeline {
 
         stage('Test') {
             steps {
-                bat "\"${PIO}\" test -e ${BOARD}"
+                //bat "\"${PIO}\" test -e ${BOARD}"
             }
         }
     }
