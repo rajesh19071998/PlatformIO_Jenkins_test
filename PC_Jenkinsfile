@@ -33,7 +33,7 @@ pipeline {
 
         stage('Archive Firmware') {
             steps {
-                archiveArtifacts artifacts: ".pio\\build\\${BOARD}\\*.bin", fingerprint: true
+                archiveArtifacts artifacts: ".pio\\build\\${BOARD}\\*.bin, .pio\\build\\${BOARD}\\*.map, .pio\\build\\${BOARD}\\*.elf", fingerprint: true
             }
         }
 
